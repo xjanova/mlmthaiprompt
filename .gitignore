@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# local-only
+resources/views/*.bak.*
+public/public
