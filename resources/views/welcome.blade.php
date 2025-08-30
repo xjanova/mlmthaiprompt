@@ -1,3 +1,4 @@
+<!-- e2e-test: 2025-08-30_23:51:33 -->
 <!-- trigger deploy -->
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
