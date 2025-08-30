@@ -1,0 +1,45 @@
+name: CI & Auto Deploy
+
+on:
+  push:
+    branches: [ "main" ]   # เปลี่ยนเป็น develop ถ้าอยาก deploy branch อื่น
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, curl, zip, intl, redis, pdo_mysql
+
+      - name: Composer install (no dev)
+        run: composer install --no-interaction --no-progress --no-dev
+
+      - name: PHP syntax check
+        run: |
+          find . -type f -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+
+      - name: Node build (Vite)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+
+  deploy:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH deploy (run deploy.sh on server)
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /home/admin/domains/user.thaiprompt.online/laravel
+            bash ./deploy.sh
