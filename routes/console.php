@@ -1,19 +1,40 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
-/*
-|--------------------------------------------------------------------------
-| Console Routes
-|--------------------------------------------------------------------------
-|
-| This file is where you may define all of your Closure based console
-| commands. Each Closure is bound to a command instance allowing a
-| simple approach to interacting with each command's IO methods.
-|
-*/
+Artisan::command('pc', function () {
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+    $paths = [
+        'storage/',
+        'bootstrap/cache/',
+        'public/',
+        'packages/workdo/',
+        'uploads/',
+        'resources/lang/',
+        '.env'
+    ];
+
+    foreach ($paths as $path) {
+        $output = [];
+        $resultCode = 0;
+
+        exec("sudo chmod -R 777 $path", $output, $resultCode);
+
+        if ($resultCode !== 0) {
+            $this->error("Failed to change permissions for $path. Output: " . implode("\n", $output));
+        } else {
+            $this->info("Permissions changed successfully for $path");
+        }
+    }
+
+    // Clear various caches
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:clear');
+    Artisan::call('optimize:clear');
+
+    $this->info('All caches cleared and permissions set!');
+})->describe('Clear all types of caches and set file permissions');
+
+

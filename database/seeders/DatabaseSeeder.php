@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,11 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(EmailTemplates::class);
+        $this->call(NotificationsTableSeeder::class);
+        $this->call(Plans::class);
+        $this->call(PermissionTableSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(DefultSetting::class);
+        $this->call(LanguageTableSeeder::class);
+        $this->call(PackagesName::class);
+        if(module_is_active('AIAssistant'))
+        {
+            $this->call(AIAssistantTemplateListTableSeeder::class);
+        }
     }
 }
