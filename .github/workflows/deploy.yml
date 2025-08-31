@@ -2,42 +2,82 @@ name: CI & Auto Deploy
 
 on:
   push:
-    branches: [ "main" ]   # เปลี่ยนเป็น develop ได้ตามต้องการ
+    branches: [ "main" ]          # เปลี่ยนเป็น develop ได้
+  workflow_dispatch: {}            # กด Run workflow เองได้
+
+# ป้องกัน deploy ซ้อนกัน
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ---------- PHP / Composer ----------
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           extensions: mbstring, xml, curl, zip, intl, redis, pdo_mysql
+          coverage: none
+
+      - name: Cache composer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
 
       - name: Composer install (no dev)
-        run: composer install --no-interaction --no-progress --no-dev
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --no-dev
 
+      # ---------- Node / Vite ----------
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Node install (use npm ci if lock exists)
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Node install (ci if lock exists; otherwise install)
         run: |
           if [ -f package-lock.json ]; then
             echo "Using npm ci"
             npm ci
-          else
-            echo "No lockfile found -> npm install"
+          elif [ -f package.json ]; then
+            echo "No lockfile -> npm install"
             npm install
+          else
+            echo "No package.json -> skip node step"
+            exit 0
           fi
 
       - name: Build assets (Vite)
-        run: npm run build
+        run: |
+          if [ -f package.json ]; then
+            npm run build
+          else
+            echo "skip build (no package.json)"
+          fi
 
+      # ---------- PHP Lint ----------
       - name: PHP syntax check
         run: |
           find . -type f -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
@@ -45,7 +85,18 @@ jobs:
   deploy:
     needs: build-test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
+      # เช็ค SSH ก่อน (ช่วยแยกปัญหา key/port ได้ไว)
+      - name: SSH precheck (echo OK)
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: 'echo OK'
+
       - name: SSH deploy (run deploy.sh on server)
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -54,5 +105,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            set -euo pipefail
             cd /home/admin/domains/user.thaiprompt.online/laravel
             bash ./deploy.sh
