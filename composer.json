@@ -79,17 +79,16 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-             "workdo\\": "packages/workdo/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
+            "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
             "app/Helper/helper.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-autoload-dump": [
@@ -113,9 +112,7 @@
             "dont-discover": []
         },
         "merge-plugin": {
-            "include": [
-                "packages/workdo/*/composer.json"
-            ],
+            "include": [],
             "recurse": false,
             "replace": false,
             "merge-dev": false
@@ -128,7 +125,7 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true,
-            "wikimedia/composer-merge-plugin": true
+            "wikimedia/composer-merge-plugin": false
         }
     },
     "minimum-stability": "stable",
