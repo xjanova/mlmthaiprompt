@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
-            <img id="blah6" class="mt-3" src="{{ !empty($addon->image) ? get_file($addon->image) : url('/packages/workdo/' . $addon->module . '/favicon.png') }}"  width="30%"/>
+            <img id="blah6" class="mt-3" src="{{ !empty($addon->image) ? get_file($addon->image) : url('/addon/' . $addon->module . '/favicon.png') }}"  width="30%"/>
         </div>
     </div>
 </div>

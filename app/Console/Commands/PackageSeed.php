@@ -84,7 +84,7 @@ class PackageSeed extends Command
     {
         $packages = [];
 
-        $vendorDir = base_path('packages/workdo');
+        $vendorDir = base_path('addon');
         $directories = File::directories($vendorDir);
 
         foreach ($directories as $directory) {

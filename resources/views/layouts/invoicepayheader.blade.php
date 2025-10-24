@@ -73,8 +73,8 @@
 @endif
 
  <script src="{{ asset('js/jquery.min.js') }}"></script>
- <link rel="stylesheet" href="{{ asset('packages/workdo/Account/src/Resources/assets/css/nprogress.css') }}" >
-<script src="{{ asset('packages/workdo/Account/src/Resources/assets/js/nprogress.js') }}"></script>
+ <link rel="stylesheet" href="{{ asset('addon/Account/src/Resources/assets/css/nprogress.css') }}" >
+<script src="{{ asset('addon/Account/src/Resources/assets/js/nprogress.js') }}"></script>
 </head>
 
 <body class="{{ !empty($company_settings['color'])?$company_settings['color']:'theme-1' }}">

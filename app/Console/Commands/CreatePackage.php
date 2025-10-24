@@ -45,7 +45,7 @@ class CreatePackage extends Command
         $this->UpperName = $name;
         $this->packageName = $this->camelToKebab($name);
 
-        $packagePath = base_path("packages/workdo/{$name}");
+        $packagePath = base_path("addon/{$name}");
 
         if (File::exists($packagePath)) {
             $this->error("Package {$name} already exists!");
@@ -200,7 +200,7 @@ class CreatePackage extends Command
             $stub = str_replace('$LOWER_NAME$', $this->LowerName, $stub);
             $stub = str_replace('$PACKAGE_NAME$', $this->packageName, $stub);
 
-            $filePath = base_path("packages/workdo/{$this->UpperName}/".$phpFile);
+            $filePath = base_path("addon/{$this->UpperName}/".$phpFile);
 
             if (!File::exists(dirname($filePath))) {
                 File::makeDirectory(dirname($filePath), 0755, true);

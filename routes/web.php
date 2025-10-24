@@ -414,7 +414,7 @@ Route::get('purchases/pdf/{id}', [PurchaseController::class, 'purchase'])->name(
 Route::any('/meta/callback', [MetaController::class, 'handleWebhook'])->name('meta.callback')->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::get('composer/json',function(){
-    $path = base_path('packages/workdo');
+    $path = base_path('addon');
     $modules = \Illuminate\Support\Facades\File::directories($path);
 
     $moduleNames = array_map(function($dir) {
@@ -428,7 +428,7 @@ Route::get('composer/json',function(){
         $require .= '"workdo/'.strtolower($packageName).'": "dev-testing",';
         $repo .= '{
             "type": "path",
-            "url": "packages/workdo/'.$module.'"
+            "url": "addon/'.$module.'"
         },';
     }
     return $require . '<br><br><br>' . $repo;

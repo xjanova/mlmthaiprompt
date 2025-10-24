@@ -8,7 +8,7 @@ Artisan::command('pc', function () {
         'storage/',
         'bootstrap/cache/',
         'public/',
-        'packages/workdo/',
+        'addon/',
         'uploads/',
         'resources/lang/',
         '.env'

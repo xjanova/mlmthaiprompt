@@ -19,7 +19,7 @@ class PackagesName extends Seeder
         {
             if($addon->package_name == null)
             {
-                $path = base_path('packages/workdo/' . $addon->module . '/module.json');
+                $path = base_path('addon/' . $addon->module . '/module.json');
                 $contents = File::get($path);
                 $contents = json_decode($contents, true);
 

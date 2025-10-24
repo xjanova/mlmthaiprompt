@@ -23,7 +23,14 @@
 - 🤖 **AI Integration** - ผสานระบบ OpenAI สำหรับสร้างเนื้อหาอัตโนมัติ
 - 📊 **Dashboard & Analytics** - แดชบอร์ดและรายงานแบบเรียลไทม์
 - 🎨 **White-Label Ready** - รองรับ Custom Domain และปรับแต่งแบรนด์ได้
-- 💰 **MLM Referral System** - ระบบแนะนำและค่าคอมมิชชั่น
+- 💰 **MLM System (ครบวงจร)** - ระบบ Multi-Level Marketing แบบครบวงจร
+  - โครงสร้างเครือข่าย Binary/Unilevel
+  - ระบบค่าคอมมิชชั่นหลายระดับ (Direct, Indirect, Binary, Matching)
+  - ระบบจัดการ Rank/ตำแหน่ง
+  - ระบบจ่ายเงิน (Payout) อัตโนมัติ
+  - ระบบโบนัสหลากหลายรูปแบบ
+  - Genealogy Tree & Network Statistics
+  - รายงานและ Dashboard แบบเรียลไทม์
 - 📱 **Responsive Design** - ใช้งานได้บนทุกอุปกรณ์
 
 ---
@@ -70,6 +77,40 @@
 - สร้าง Landing Page
 - ระบบ CMS
 - จัดการเนื้อหาเว็บไซต์
+
+#### 8. **MLM System** - ระบบ Multi-Level Marketing (ใหม่!)
+- **โครงสร้างเครือข่าย:**
+  - รองรับ Binary Tree (ขาซ้าย-ขวา)
+  - รองรับ Unilevel (ไม่จำกัดจำนวน)
+  - Genealogy Tree แบบไดนามิก
+  - การจัดวางอัตโนมัติ (Auto Placement)
+
+- **ระบบค่าคอมมิชชั่น:**
+  - Direct Commission (ค่าคอมโดยตรง)
+  - Indirect Commission (ค่าคอมทางอ้อม หลายระดับ)
+  - Binary Commission (ค่าคอมจาก Binary Matching)
+  - Leadership Commission (ค่าคอมผู้นำ)
+  - Matching Bonus
+  - สามารถตั้งค่า % และเงื่อนไขได้
+
+- **ระบบจัดการตำแหน่ง (Ranks):**
+  - สร้างตำแหน่งได้ไม่จำกัด (Bronze, Silver, Gold, Diamond, etc.)
+  - กำหนดเกณฑ์การได้ตำแหน่ง
+  - โบนัสรายเดือนตามตำแหน่ง
+  - ติดตามประวัติการเลื่อนตำแหน่ง
+
+- **ระบบจ่ายเงิน (Payout):**
+  - ขอถอนเงินอัตโนมัติ
+  - รองรับหลายวิธีการจ่าย (Bank, PayPal, Stripe, Crypto)
+  - ระบบอนุมัติและติดตาม
+  - ค่าธรรมเนียมแบบยืดหยุ่น
+
+- **รายงานและสถิติ:**
+  - Dashboard MLM แบบเรียลไทม์
+  - รายงานค่าคอมมิชชั่น
+  - รายงานยอดขายทีม
+  - สถิติเครือข่าย (ซ้าย-ขวา)
+  - ประวัติกิจกรรมทั้งหมด
 
 ### 🛠️ ฟีเจอร์เสริม
 
@@ -356,7 +397,7 @@ mlmthaiprompt/
 │   ├── Classes/                # Utilities (Module, Menu, Setting)
 │   └── Helper/                 # Helper functions
 │
-├── packages/workdo/            # Feature Modules
+├── addon/            # Feature Modules
 │   ├── ProductService/         # จัดการสินค้า
 │   ├── Taskly/                 # จัดการโปรเจค
 │   ├── Account/                # ระบบบัญชี
@@ -366,6 +407,11 @@ mlmthaiprompt/
 │   ├── LandingPage/            # Website Builder
 │   ├── Stripe/                 # Stripe Payment
 │   └── Paypal/                 # PayPal Payment
+│
+├── app/Services/               # Business Logic Services
+│   ├── MlmNetworkService.php   # MLM Network Management
+│   ├── MlmCommissionService.php # MLM Commission Calculation
+│   └── [other services...]
 │
 ├── resources/
 │   ├── views/                  # Blade Templates
@@ -438,7 +484,7 @@ php artisan test
 php artisan make:module YourModuleName
 ```
 
-โมดูลจะถูกสร้างใน `packages/workdo/YourModuleName/`
+โมดูลจะถูกสร้างใน `addon/YourModuleName/`
 
 ### Artisan Commands ที่มีประโยชน์
 
@@ -585,11 +631,22 @@ cp resources/lang/en.json resources/lang/your_lang.json
 
 ## 📈 Changelog
 
-### Latest Updates
+### v2.0.0 - MLM System Release 🎉
+- ✅ **เพิ่มระบบ MLM แบบครบวงจร**
+  - 6 Database Tables ใหม่ (Networks, Ranks, Commissions, Payouts, Bonuses, Genealogy)
+  - 8 Eloquent Models พร้อม Relations
+  - 2 Service Classes สำหรับ Business Logic
+  - รองรับ Binary & Unilevel Structure
+  - ระบบค่าคอมมิชชั่นหลายระดับ
+  - ระบบจัดการตำแหน่งและโบนัส
+
+### v1.1.0
+- ✅ **เปลี่ยนโครงสร้าง:** packages/workdo → addon
 - ✅ อัปเดตโค้ดล่าสุดจากเซิร์ฟเวอร์
 - ✅ ปรับปรุง deployment workflow
 - ✅ ซิงค์ไฟล์ configuration
 - ✅ เพิ่ม CI/CD automation
+- ✅ เขียน README ใหม่ทั้งหมด
 
 ---
 

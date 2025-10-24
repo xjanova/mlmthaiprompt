@@ -1,6 +1,6 @@
 @extends('marketplace.marketplace')
 @php
-    $path = url("packages/workdo/$PACKAGE_NAME$/src/marketplace");
+    $path = url("addon/$PACKAGE_NAME$/src/marketplace");
 @endphp
 @section('page-title')
     {{ __('Software Details') }}
